@@ -1,0 +1,124 @@
+---
+title: "Rolling Dice Functions"
+author: "Paige Patrick"
+date: "10/8/2019"
+output: html_document
+---
+
+
+```{r set up for both dice rolling function}
+
+## OBJECTIVE: set up some basic parameters neccessary for running the dice_roll function
+
+
+## Simulates one six-sided die
+die <- 1:6 
+
+## Sets the number of rolls equal to zero, so we can keep track of the number of rolls a player has used
+## Each time the dice_roll function is called on, the num_rolls will increase by one
+num_rolls <- 0 
+
+
+## Creates an empty vector in the global environment
+## This will allow us to add objects to rolling_dice within a function, that will then be transferred to the global environment (I'm preety sure?)
+rolling_dice <- vector()
+
+```
+
+```{r initial roll function}
+
+## OBJECTIVE: to initiate game play with the first roll
+
+## Initial roll will only happen after player has requested to start a game
+
+## INITIAL ROLL FUNCTION
+
+initial_roll <- function() {
+  
+  
+  ## All of these lines are explained in detail in the the reroll function, please see next chunk
+  num_rolls <<- num_rolls + 1
+  
+  rolling_dice <- sample(die, size = 5, replace = TRUE)
+  
+  print(rolling_dice)
+  num_rolls
+}
+
+## This function looks almost identicial to the reroll function, only smaller and simpler
+## Initial roll is a seperate function from the reroll function, because it's anticipated this will make things easier later on 
+
+initial_roll()
+```
+
+```{r reroll function}
+
+## OBJECTIVE: to reroll the number of a dice a player has left
+
+## Dice reroll will only happen after player has requested to do so
+
+## Feel free to set the value of remaining dice to be 5,4,3, or 2 (never 1 since a player will never be able to keep four dice)
+remaining_dice <- 1
+## Later, remaining_dice will be the length of a vector inputed directly into this function from a different function
+
+
+## REROLL FUNCTION
+
+reroll <- function(remaining_dice) {
+  
+  
+  ## First if-else statement double checks that the player has additional rolls left
+  ## If the player has additional rolls left, and chooses to use one, num_rolls will increase by one
+  ## The max amount of rolls a player has is three, which is why it throws the player a message after num_rolls is three
+  if(num_rolls == 3) {
+    
+    print("Sorry boo boo, no more rolls for you.")
+    
+  }
+  
+  else{
+  
+    num_rolls <<- num_rolls + 1
+    
+    ## The next four if-else statements check the vector length of remaining_dice and simulate the appropriate dice rolling
+    ## Then this simulated dice roll gets saved to that empty rolling_dice vector that we set up in the set up dice roll function chunk
+    if(remaining_dice == 5) { ## if the remaining_dice vector length is 5
+      rolling_dice <- sample(die, size = 5, replace = TRUE)
+      print(rolling_dice) ## had to use print, once num_rolls was added to the if-else statement (not sure why)
+      num_rolls ## allows player to see the number of rolls they have used thus far
+    }
+    
+    else{
+      if(remaining_dice == 4) { ## if the remaining_dice vector length is 4
+        rolling_dice <- sample(die, size = 4, replace = TRUE)
+        print(rolling_dice)
+        num_rolls
+      }
+      
+      else{
+        if(remaining_dice == 3) { ## if the remaining_dice vector length is 3
+          rolling_dice <- sample(die, size = 3, replace = TRUE)
+          print(rolling_dice)
+          num_rolls
+        }
+        
+        else{
+          if(remaining_dice == 2) { ## if the remaining_dice vector length is 2
+            rolling_dice <- sample(die, size = 2, replace = TRUE)
+            print(rolling_dice)
+            num_rolls
+          }
+          
+          else{ ## just in case you  tryin' to be cute
+            print("Oof.... This is super awkward. You clearly did not stay within the parameters explicitly stated above.")
+            num_rolls <<- num_rolls - 1 ## this is me being nice and making sure your roll isn't wasted
+            num_rolls
+          }
+        }
+      }
+    }
+  }
+}
+
+reroll(remaining_dice) ## calls the function
+```
